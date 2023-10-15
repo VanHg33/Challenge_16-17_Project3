@@ -145,8 +145,8 @@ let cities = [
   'Sydney',
 ];
 
-// Initialize an object to store data by state and job requirement type
-let allData0 = {};
+// Initialize an object to store data by state and job employment type
+let allData = {};
 
 // Function to load data from the server
 function loadDataFromServer(city) {
@@ -161,14 +161,14 @@ function loadDataFromServer(city) {
         }
         return response.json();
       })
-      .then((data0) => {
-        if (data0.error) {
+      .then((data) => {
+        if (data.error) {
           // Handle the error message received from the server
-          console.error('Error loading data:', data0.error);
-          reject(data0.error);
+          console.error('Error loading data:', data.error);
+          reject(data.error);
         } else {
-          console.log('Data received from the server:', data0); // Log the received data
-          resolve({ city, data0 });
+          console.log('Data received from the server:', data); // Log the received data
+          resolve({ city, data });
         }
       })
       .catch((error) => {
@@ -178,114 +178,148 @@ function loadDataFromServer(city) {
   });
 }
 
-// // Function to create a multi-bar chart for a given city and its data
-// function createMultiBarChart(city, cityData) {
-//   // Extract the job requirement types and their counts for the given city
-//   const jobRequirements = Object.keys(cityData);
-//   const counts = Object.values(cityData);
-
-//   // Get the canvas element to render the chart
-//   const canvas = document.createElement('canvas');
-//   canvas.id = city; // Set a unique ID for the canvas
-
-//   // Create a container element for the chart
-//   const chartContainer = document.createElement('div');
-//   chartContainer.className = 'chart-container';
-//   chartContainer.appendChild(canvas);
-
-//   // Add the container to the DOM
-//   document.body.appendChild(chartContainer);
-
-//   // Create a bar chart using Chart.js
-//   new Chart(canvas, {
-//     type: 'bar',
-//     data: {
-//       labels: jobRequirements,
-//       datasets: [
-//         {
-//           label: `Job Requirements in ${city}`,
-//           data: counts,
-//           backgroundColor: 'rgba(75, 192, 192, 0.2)', // Customize the bar colors
-//           borderColor: 'rgba(75, 192, 192, 1)', // Customize the bar border colors
-//           borderWidth: 1,
-//         },
-//       ],
-//     },
-//     options: {
-//       scales: {
-//         y: {
-//           beginAtZero: true,
-//         },
-//       },
-//     },
-//   });
-// }
-
-// Function to create a multi-bar chart for a given city and its data
-function createMultiBarChart(city, cityData) {
-  // Extract the job requirement types and their counts for the given city
-  const jobRequirements = Object.keys(cityData);
-  const counts = Object.values(cityData);
-
-  // Create a container element for the chart
-  const chartContainer = document.createElement('div');
-  chartContainer.className = 'chart-container';
-
-  // Add the container to the DOM
-  document.body.appendChild(chartContainer);
-
-  // Create a bar chart using Chart.js
-  new Chart(chartContainer, {
-    type: 'bar',
-    data: {
-      labels: jobRequirements,
-      datasets: [
-        {
-          label: `Job Requirements in ${city}`,
-          data: counts,
-          backgroundColor: 'rgba(75, 192, 192, 0.2)', // Customize the bar colors
-          borderColor: 'rgba(75, 192, 192, 1)', // Customize the bar border colors
-          borderWidth: 1,
-        },
-      ],
-    },
-    options: {
-      scales: {
-        y: {
-          beginAtZero: true,
-        },
-      },
-    },
-  });
-}
-
-
-// Load data from the server for all cities and create charts
+// Loop through the cities and load data from the server
 Promise.all(
   cities.map((city) => {
-    return loadDataFromServer(city)
-      .then((result) => {
-        let city = result.city;
-        let data0 = result.data0;
-
-        // Organize the data by job requirements type for the city
-        let cityData = {};
-
-        data0.forEach((item) => {
-          let job_requirement = item.job_requirement;
-          let count = item.count;
-
-          if (!cityData[job_requirement]) {
-            cityData[job_requirement] = 0;
-          }
-
-          cityData[job_requirement] += count;
-        });
-
-        // Now you have data organized by job requirement type for the city
-        // You can proceed to create multi-bar charts for each city
-        createMultiBarChart(city, cityData);
-      })
-      .catch((error) => console.error('Error loading data:', error));
+    return loadDataFromServer(city);
   })
-).catch((error) => console.error('Error loading data:', error));
+)
+  .then((results) => {
+    // Process and store the data for each city
+    results.forEach((result) => {
+      let city = result.city;
+      let data = result.data;
+
+      // Organize the data by state and job employment type
+      let dataByStateAndType = {};
+
+      data.forEach((item) => {
+        let state = item.state;
+        let educationType = item.job_required_education_bachelors_degree;
+        let count = item.count;
+
+        if (!dataByStateAndType[state]) {
+          dataByStateAndType[state] = {};
+        }
+
+        if (!dataByStateAndType[state][educationType]) {
+          dataByStateAndType[state][educationType] = 0;
+        }
+
+        dataByStateAndType[state][educationType] += count;
+      });
+
+      // Now you have data organized by state and job employment type
+      // You can proceed to create pie charts for each state
+      createPieCharts(dataByStateAndType);
+    });
+  })
+  .catch((error) => console.error('Error loading data:', error));
+
+// Initialize a set to keep track of states for which pie charts have been created
+let createdPieCharts = new Set();
+
+function createPieCharts(dataByStateAndType) {
+  // Loop through the states
+  for (let state in dataByStateAndType) {
+    if (dataByStateAndType.hasOwnProperty(state)) {
+      // Check if a pie chart has already been created for this state
+      if (!createdPieCharts.has(state)) {
+        console.log(`Creating pie chart for state: ${state}`);
+        let stateData = dataByStateAndType[state];
+        // Create a pie chart for the current state
+        createPieChart(stateData, state);
+
+        // Add the state to the set of created pie charts
+        createdPieCharts.add(state);
+      }
+    }
+  }
+}
+
+// Function to create a pie chart
+function createPieChart(data, state) {
+  // Define dimensions and radius for the pie chart and legend
+  let width = 600; // Make the width larger to accommodate the legend
+  let height = 400; // Increased height to make space for state name and legend
+  let radius = Math.min(width, height) / 3;
+
+  // Select the SVG element or create one for the pie chart
+  let svg = d3
+    .select(`#${state}-pie-chart`)
+    .append("svg")
+    .attr("width", width)
+    .attr("height", height);
+
+  // Create a group for the pie chart
+  let pieGroup = svg
+    .append("g")
+    .attr("transform", `translate(${width / 2},${height / 2})`);
+
+  // Create a pie layout
+  let pie = d3.pie().value((d) => d.value);
+
+  // Define a color scale for the pie chart segments
+  let color = d3.scaleOrdinal(d3.schemeCategory10);
+
+  // Generate the pie chart paths
+  let arcs = pieGroup
+    .selectAll("arc")
+    .data(
+      pie(
+        Object.entries(data).map(([key, value]) => ({
+          key,
+          value,
+        }))
+      )
+    )
+    .enter()
+    .append("g")
+    .attr("class", "arc");
+
+  // Create the pie chart segments
+  let arc = d3.arc().innerRadius(0).outerRadius(radius);
+
+  arcs
+    .append("path")
+    .attr("d", arc)
+    .attr("fill", (d) => color(d.data.key));
+
+  // Add a title indicating the state above the pie chart
+  svg
+    .append("text")
+    .attr("x", width / 2)
+    .attr("y", 20) // Adjust the y position to place it above the pie chart
+    .attr("text-anchor", "middle")
+    .text(state);
+
+  // Add a legend with percentages next to job types
+  let legendItem = svg.append("g").attr("class", "legend-item");
+  let educations = Object.keys(data);
+  let legendSpacing = 20;
+
+  const valueToLabel = {
+    '0': 'Not Required',
+    '1': 'Required',
+  };
+  educations.forEach((education, index) => {
+    legendItem
+      .append("rect")
+      .attr("x", 20)
+      .attr("y", height / 2 + index * legendSpacing)
+      .attr("width", 15)
+      .attr("height", 15)
+      .style("fill", color(education)); // Assign the color based on the job type
+
+    // legendItem
+    //   .append("text")
+    //   .attr("x", 40)
+    //   .attr("y", height / 2 + index * legendSpacing + 12)
+    //   .text(`${education} (${((data[education] / d3.sum(Object.values(data))) * 100).toFixed(2)}%)`);
+    legendItem
+      .append("text")
+      .attr("x", 40)
+      .attr("y", height / 2 + index * legendSpacing + 12)
+      .text(`${valueToLabel[education]} (${((data[education] / d3.sum(Object.values(data))) * 100).toFixed(2)}%)`);
+  });
+}

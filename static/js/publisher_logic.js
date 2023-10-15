@@ -56,27 +56,27 @@ Promise.all(
       let data1 = result.data1;
 
       // Organize the data by state and type
-      let dataByStateAndType = {};
+      let dataByStateAndType1 = {};
 
       data1.forEach((item) => {
         let state = item.state;
-        let jobPublisher = item.job_publisher;
+        let jobPublisher = item.publisher;
         let count = item.count;
 
-        if (!dataByStateAndType[state]) {
-          dataByStateAndType[state] = {};
+        if (!dataByStateAndType1[state]) {
+          dataByStateAndType1[state] = {};
         }
 
-        if (!dataByStateAndType[state][jobPublisher]) {
-          dataByStateAndType[state][jobPublisher] = 0;
+        if (!dataByStateAndType1[state][jobPublisher]) {
+          dataByStateAndType1[state][jobPublisher] = 0;
         }
 
-        dataByStateAndType[state][jobPublisher] += count;
+        dataByStateAndType1[state][jobPublisher] += count;
       });
 
       // Now you have data organized by state and type
       // You can proceed to create pie charts for each state
-      createPieCharts(dataByStateAndType);
+      createPieCharts(dataByStateAndType1);
     });
   })
   .catch((error) => console.error('Error loading data:', error));
@@ -84,14 +84,14 @@ Promise.all(
   // Initialize a set to keep track of states for which pie charts have been created
 let createdPieCharts = new Set();
 
-function createPieCharts(dataByStateAndType) {
+function createPieCharts(dataByStateAndType1) {
   // Loop through the states
-  for (let state in dataByStateAndType) {
-    if (dataByStateAndType.hasOwnProperty(state)) {
+  for (let state in dataByStateAndType1) {
+    if (dataByStateAndType1.hasOwnProperty(state)) {
       // Check if a pie chart has already been created for this state
       if (!createdPieCharts.has(state)) {
         console.log(`Creating pie chart for state: ${state}`);
-        let stateData = dataByStateAndType[state];
+        let stateData = dataByStateAndType1[state];
         // Create a pie chart for the current state
         createPieChart(stateData, state);
 
@@ -148,7 +148,7 @@ function createPieChart(data1, state) {
   arcs
     .append("path")
     .attr("d", arc)
-    .attr("fill", (d) => color(d.data1.key));
+    .attr("fill", (d) => color(d.data.key));
 
   // Add a title indicating the state above the pie chart
   svg

@@ -211,13 +211,13 @@ def get_education():
         cursor.execute("SELECT job_state, job_required_education_bachelors_degree, COUNT(*) FROM json_data GROUP BY job_state, job_required_education_bachelors_degree")
 
         # Fetch all the data
-        data0 = cursor.fetchall()
+        data = cursor.fetchall()
 
         # Close the database connection
         conn.close()
 
         # Prepare data for sending as JSON
-        result = [{'state': row[0], 'job_required_education_bachelors_degree': row[1], 'count': row[2]} for row in data0]
+        result = [{'state': row[0], 'job_required_education_bachelors_degree': row[1], 'count': row[2]} for row in data]
 
         return jsonify(result)
 
