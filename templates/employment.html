@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employment Type Statistics</title>
+    <!-- Include the D3.js library -->
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+
+    <!-- Include your JavaScript code to load and create pie charts here -->
+    <script src="{{ url_for('static', filename='js/employment_logic.js') }}?v=123456"></script>
+
+    <!-- Include your CSS styles -->
+    <!-- <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}"> -->
+    <style>
+        /* Style to display two pie charts in a row */
+        .chart-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+        }
+
+        /* Style for individual pie chart divs */
+        .chart {
+            flex-basis: calc(50% - 20px); /* Adjust the width as needed */
+            margin: 10px;
+            border: 1px solid #ccc; /* Add a border for separation */
+            padding: 10px;
+            box-sizing: border-box;
+        }
+    </style>
+</head>
+<body>
+    <!-- Add a title or introductory content if needed -->
+    <h1>Employment Type Pie Charts per State</h1>
+    
+    <!-- Container for pie charts -->
+    <div class="chart-container">
+        <!-- Pie charts for each state -->
+        <div id="SA-pie-chart" class="chart"></div>
+        <div id="QLD-pie-chart" class="chart"></div>
+        <div id="ACT-pie-chart" class="chart"></div>
+        <div id="NT-pie-chart" class="chart"></div>
+        <div id="TAS-pie-chart" class="chart"></div>
+        <div id="VIC-pie-chart" class="chart"></div>
+        <div id="WA-pie-chart" class="chart"></div>
+        <div id="NSW-pie-chart" class="chart"></div>
+    </div>
+</body>
+</html>
