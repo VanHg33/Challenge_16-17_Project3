@@ -10,22 +10,27 @@ To visualize this data and provide valuable insights, Flask APIs are utilized to
 
 **List of HTML Pages:**
 
-***index.html (Home Page): The primary landing page displaying data-related job listings across Australia.***
+***index.html (Home Page):*** The primary landing page displaying data-related job listings across Australia.
 
-dashboard.html (Dashboard Page): This page offers the capability to select different cities in Australia for searching data job opportunities.
+***dashboard.html (Dashboard Page):*** This page offers the capability to select different cities in Australia for searching data job opportunities.
 
-map.html (Map Page): Presents markers for each state in Australia, along with the total number of job listings in each state.
+***map.html (Map Page):*** Presents markers for each state in Australia, along with the total number of job listings in each state.
 
-employment.html (Employment Page): Showcases pie charts illustrating employment type statistics in the data job field.
+***employment.html (Employment Page):*** Showcases pie charts illustrating employment type statistics in the data job field.
 
-education.html (Education Page): Features pie charts highlighting the educational requirements for data-related jobs.
+***education.html (Education Page):*** Features pie charts highlighting the educational requirements for data-related jobs.
 
-publisher.html (Publisher Page): Provides insights into the popular job publishers for data job listings in each Australian state.
+***publisher.html (Publisher Page):*** Provides insights into the popular job publishers for data job listings in each Australian state.
 
-Tech Stack Used:
-
-Python (including Pandas, Flask, JSON, and SQLAlchemy)
+# Tech Stack Used:
+The project is powered bby Python Flask API and includes HTML/CSS, JavaScript and SQLite database.
+Python (including Pandas, JSON)
 JavaScript (including Plotly, Leaflet, and D3.js)
+SQLite
 HTML and CSS
-Bootstrap for styling and design
+Bootstrap for styling and design (JavaScript library)
+
+Size of data: The databse includes 592 rows and 12 columns 
+
+
 In the website's header, you'll find buttons for accessing the dashboard, map, and a dropdown menu leading to statistical tables for employment, education, and publishers. Each HTML page is associated with its JavaScript file for ease of connection and manipulation, while a CSS file is used to maintain the format and style of the website's features.
