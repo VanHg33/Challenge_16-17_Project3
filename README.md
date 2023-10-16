@@ -8,7 +8,7 @@ Following data cleansing, the information is exported into a SQLite database. SQ
 
 To visualize this data and provide valuable insights, Flask APIs are utilized to extract data from the SQLite Database. This data is then used to create interactive visualizations in the form of pie charts, maps, and tables.
 
-#### List of HTML Pages:
+*List of HTML Pages:*
 
 ##### index.html (Home Page): The primary landing page displaying data-related job listings across Australia.
 
