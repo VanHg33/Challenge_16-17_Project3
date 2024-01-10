@@ -23,7 +23,7 @@ To visualize this data and provide valuable insights, Flask APIs are utilized to
 ***publisher.html (Publisher Page):*** Provides insights into the popular job publishers for data job listings in each Australian state.
 
 # Tech Stack Used:
-The project is powered bby Python Flask API and includes HTML/CSS, JavaScript and SQLite database.
+The project is powered by Python Flask API and includes HTML/CSS, JavaScript and SQLite database.
 Python (including Pandas, JSON)
 JavaScript (including Plotly, Leaflet, and D3.js)
 SQLite
